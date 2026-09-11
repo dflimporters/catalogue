@@ -1,0 +1,212 @@
+/* DFL Catalogue 2026 — shared styles (site shell + per-page design system) */
+/* Rebrand 2026-09-10: DFL blue / black / white primary palette (was Covebay
+   blue/green). Sampled from assets/DFL Logo Light Blue (New) 2.png. */
+
+:root{
+  --dfl-blue:#2C67D2; --dfl-blue-deep:#15295C;
+  --ink:#12161C; --bg:#F4F5F7; --card:#FFFFFF;
+  --line:rgba(18,22,28,0.08);
+  --orange:#F5A623; --orange-deep:#D9890F;
+  --text-soft:#5B6472; --text-faint:#8B93A0;
+  --radius:16px; --radius-sm:10px;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{scroll-behavior:smooth;}
+body{background:#E4E6EA; font-family:'Inter',-apple-system,sans-serif; -webkit-font-smoothing:antialiased;}
+
+/* ---------- site chrome (index.html only) ---------- */
+.sitenav{
+  position:sticky; top:0; z-index:50; background:rgba(18,22,28,.96); backdrop-filter:blur(6px);
+  display:flex; align-items:center; justify-content:center; gap:22px; padding:14px 24px; overflow-x:auto; white-space:nowrap;
+}
+.sitenav a{color:rgba(255,255,255,.7); font-size:12.5px; font-weight:600; text-decoration:none; letter-spacing:.01em;}
+.sitenav a:hover, .sitenav a.active{color:#fff;}
+.sitenav .brand{color:#fff; font-weight:800; font-size:13px; margin-right:6px; letter-spacing:.01em;}
+
+.site-frame{padding:28px 16px 60px;}
+.page-frame{position:relative; width:100%; max-width:816px; margin:0 auto 28px; overflow:hidden; border-radius:4px;}
+.page-frame .page{position:absolute; top:0; left:0; width:816px; transform-origin:top left;}
+
+/* ---------- inner page design system (shared across all pages) ---------- */
+.page{
+  width:816px; height:1056px; margin:0 auto; background:var(--bg);
+  position:relative; box-shadow:0 20px 50px rgba(18,22,28,0.28); overflow:hidden;
+}
+.page.cover{background:#fff;}
+
+.hero{
+  position:relative; padding:26px 40px 22px; color:#fff; overflow:hidden;
+  background:
+    radial-gradient(circle at 92% 8%, rgba(255,255,255,.14), transparent 42%),
+    linear-gradient(155deg, var(--dfl-blue) 0%, var(--dfl-blue-deep) 100%);
+}
+.hero::before{content:""; position:absolute; inset:0; opacity:.4; background-image:radial-gradient(rgba(255,255,255,.12) 1px,transparent 1px); background-size:16px 16px; pointer-events:none;}
+.hero-top{position:relative; z-index:2; display:flex; align-items:center; justify-content:space-between;}
+.logo{height:26px; filter:brightness(0) invert(1);}
+.page-tag{font-size:11px; font-weight:700; letter-spacing:.08em; color:rgba(255,255,255,.7); text-transform:uppercase;}
+.hero-body{position:relative; z-index:2; margin-top:18px;}
+.eyebrow{font-size:11px; font-weight:700; letter-spacing:.1em; color:rgba(255,255,255,.7); text-transform:uppercase; margin:0 0 8px;}
+.hero h1{font-size:28px; font-weight:800; line-height:1.15; margin:0 0 8px; letter-spacing:-.01em;}
+.hero p{font-size:13px; line-height:1.55; color:rgba(255,255,255,.82); max-width:54ch;}
+.hero-brands-label{font-size:9.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.55); margin:18px 0 8px; position:relative; z-index:2;}
+.hero-brands{display:flex; gap:10px; margin-top:6px; position:relative; z-index:2; flex-wrap:wrap; align-items:center;}
+.hero-brand-chip{
+  background:#fff; border-radius:12px; padding:0 18px; display:inline-flex; align-items:center; height:52px;
+  box-shadow:0 4px 14px rgba(0,0,0,.18); border:1px solid rgba(255,255,255,.6);
+}
+.hero-brand-chip img{height:30px; display:block;}
+.hero-brand-chip.solo{height:60px; padding:0 22px;}
+.hero-brand-chip.solo img{height:36px;}
+
+.content{padding:24px 40px 0 40px;}
+.grid{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:2px;}
+.card{
+  background:var(--card); border-radius:var(--radius); border:1px solid var(--line);
+  box-shadow:0 2px 10px rgba(18,22,28,.05); padding:16px;
+  display:flex; flex-direction:row; align-items:center; gap:14px; position:relative;
+}
+.card.feature{grid-column:span 2; padding:20px; gap:20px;}
+
+/* product "icon" — stands in for a photo until real photography is added */
+.picon{
+  width:46px; height:46px; border-radius:12px; background:rgba(44,103,210,.09); flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+}
+.picon svg{width:23px; height:23px; color:var(--dfl-blue);}
+.card.feature .picon{width:60px; height:60px; border-radius:14px;}
+.card.feature .picon svg{width:29px; height:29px;}
+
+/* real product photo — replaces .picon on a card once photography exists */
+.thumb{
+  width:64px; height:64px; border-radius:12px; background:#EEF1F6; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center; overflow:hidden;
+}
+.thumb img{width:100%; height:100%; object-fit:contain;}
+.card.feature .thumb{width:96px; height:96px; border-radius:14px;}
+
+.cname{font-size:14.5px; font-weight:800; color:var(--ink); letter-spacing:-.01em;}
+.card.feature .cname{font-size:19px;}
+.specs{font-size:11.5px; color:var(--text-soft); line-height:1.5; font-weight:500; margin-top:3px;}
+.tag{
+  display:inline-block; font-size:9.5px; font-weight:800; letter-spacing:.04em; text-transform:uppercase;
+  padding:4px 10px; background:rgba(44,103,210,.09); color:var(--dfl-blue-deep); border-radius:100px;
+  width:fit-content; margin-top:7px;
+}
+.card.feature .tag{background:var(--dfl-blue-deep); color:#fff;}
+.new-flag{
+  position:absolute; top:12px; right:12px; background:var(--orange); color:#211404;
+  font-size:9px; font-weight:800; letter-spacing:.04em; padding:4px 9px; border-radius:100px;
+}
+.pending-flag{
+  position:absolute; top:12px; right:12px; background:var(--text-faint); color:#fff;
+  font-size:9px; font-weight:800; letter-spacing:.04em; padding:4px 9px; border-radius:100px;
+}
+.footer{
+  position:absolute; bottom:0; left:0; right:0; height:38px; background:var(--ink);
+  display:flex; align-items:center; justify-content:space-between; padding:0 40px;
+}
+.footer span{font-size:10px; color:#fff; opacity:0.6; letter-spacing:0.04em; font-weight:600;}
+
+/* ---------- cover page (01) ---------- */
+.cover-topbar{
+  height:64px; display:flex; align-items:center; justify-content:center;
+  border-bottom:1px solid var(--line);
+}
+.cover-logo{height:34px;}
+
+.cover-hero{position:relative; height:320px; overflow:hidden; color:#fff;}
+.cover-hero-bg{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 40%;}
+.cover-hero-overlay{
+  position:absolute; inset:0;
+  background:
+    radial-gradient(circle at 92% 8%, rgba(255,255,255,.14), transparent 42%),
+    linear-gradient(165deg, rgba(21,41,92,.94) 0%, rgba(44,103,210,.88) 100%);
+}
+.cover-hero-overlay::before{content:""; position:absolute; inset:0; opacity:.5; background-image:radial-gradient(rgba(255,255,255,.16) 1.5px,transparent 1.5px); background-size:18px 18px;}
+.cover-hero-content{position:relative; z-index:2; height:100%; display:flex; flex-direction:column; justify-content:center; padding:0 48px;}
+.cover-hero-content .eyebrow{color:rgba(255,255,255,.75);}
+.cover-hero-content h1{font-size:27px; font-weight:800; line-height:1.22; letter-spacing:-.01em; max-width:540px; margin:0 0 10px;}
+.cover-hero-content p{font-size:13.5px; line-height:1.55; color:rgba(255,255,255,.85); max-width:460px;}
+
+.cover-gallery{padding:32px 40px 0;}
+.cover-gallery-title{font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--dfl-blue-deep); text-align:center; margin-bottom:18px;}
+.cover-gallery-grid{
+  display:grid; grid-template-columns:repeat(3,1fr);
+  background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+  box-shadow:0 2px 10px rgba(18,22,28,.05); padding:0 16px 20px;
+}
+.gallery-col{text-align:center; padding:0 16px; border-left:1px solid var(--line);}
+.gallery-col:first-child{border-left:none;}
+.gallery-photo{
+  border-radius:10px; overflow:hidden; aspect-ratio:16/10; background:#EEF1F6;
+  margin-top:16px;
+}
+.gallery-photo img{width:100%; height:100%; object-fit:cover;}
+.gallery-icon{
+  width:42px; height:42px; border-radius:50%; background:var(--dfl-blue); color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  margin:-21px auto 12px; position:relative; z-index:2; border:3px solid var(--card);
+  box-shadow:0 3px 8px rgba(18,22,28,.16);
+}
+.gallery-icon svg{width:20px; height:20px;}
+.gallery-title{font-size:13.5px; font-weight:800; color:var(--ink); letter-spacing:-.01em;}
+.gallery-desc{font-size:10.5px; color:var(--text-soft); margin-top:5px; line-height:1.4;}
+
+/* ---------- cover: company snapshot stats ---------- */
+.cover-facts{padding:32px 40px 40px;}
+.cover-facts-title{font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--dfl-blue-deep); text-align:center; margin-bottom:20px;}
+.cover-facts-grid{
+  display:grid; grid-template-columns:repeat(5,1fr);
+  background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+  box-shadow:0 2px 10px rgba(18,22,28,.05); padding:26px 12px;
+}
+.fact{text-align:center; padding:0 14px; border-left:1px solid var(--line);}
+.fact:first-child{border-left:none;}
+.fact-num{font-size:24px; font-weight:800; color:var(--dfl-blue-deep); letter-spacing:-.01em; line-height:1.15;}
+.fact-label{font-size:10.5px; color:var(--text-soft); margin-top:8px; line-height:1.4; font-weight:600;}
+
+/* ---------- section divider page (e.g. Covebay intro banner) ---------- */
+.page.divider{height:auto; min-height:0;}
+.page.divider .footer{position:static;}
+.divider-header{display:flex; align-items:center; justify-content:space-between; padding:26px 40px 0;}
+.divider-header .logo-color{height:24px;}
+.divider-header .page-tag{color:var(--text-faint);}
+.divider-body{display:flex; flex-direction:column; align-items:center; padding:32px 48px 46px; text-align:center;}
+.divider-body img{width:100%; max-width:700px; border-radius:16px; box-shadow:0 10px 34px rgba(18,22,28,.14);}
+.divider-eyebrow{font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--dfl-blue-deep); margin:26px 0 8px;}
+.divider-title{font-size:28px; font-weight:800; color:var(--ink); letter-spacing:-.01em; margin-bottom:10px;}
+.divider-sub{font-size:14px; line-height:1.6; color:var(--text-soft); max-width:480px;}
+
+/* ---------- table of contents ---------- */
+.toc-tabs{display:flex; flex-wrap:wrap; gap:8px; margin-top:18px; position:relative; z-index:2;}
+.toc-tab{font-size:11px; font-weight:700; color:#fff; background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.3); padding:7px 14px; border-radius:100px; text-decoration:none; letter-spacing:.01em;}
+.toc-tab:hover{background:rgba(255,255,255,.26);}
+
+.toc-tile{text-decoration:none; color:inherit; display:flex; flex-direction:row; align-items:center; gap:14px; flex:1;}
+.tile-title{font-size:14.5px; font-weight:800; color:var(--ink); letter-spacing:-.01em;}
+.card.feature .tile-title{font-size:19px;}
+.tile-desc{font-size:11.5px; color:var(--text-soft); line-height:1.5; margin-top:2px;}
+.tile-arrow{font-size:10.5px; font-weight:700; color:var(--dfl-blue); letter-spacing:.02em; margin-top:7px; display:flex; align-items:center; gap:4px;}
+
+/* ---------- back cover ---------- */
+.backcover{
+  position:absolute; inset:0; color:#fff; text-align:center; overflow:hidden;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  background:
+    radial-gradient(circle at 18% 88%, rgba(255,255,255,.10), transparent 45%),
+    linear-gradient(155deg, var(--dfl-blue) 0%, var(--ink) 100%);
+}
+.backcover::before{content:""; position:absolute; inset:0; opacity:.35; background-image:radial-gradient(rgba(255,255,255,.14) 1px,transparent 1px); background-size:18px 18px; pointer-events:none;}
+.backcover>*{position:relative; z-index:2;}
+.bc-logo{height:56px; filter:brightness(0) invert(1);}
+.bc-tagline{font-size:12px; letter-spacing:.14em; text-transform:uppercase; opacity:.8; margin-top:16px;}
+.bc-thanks{font-size:23px; font-weight:800; margin-top:36px; max-width:460px; line-height:1.4;}
+.bc-divider{width:36px; height:2px; background:rgba(255,255,255,.4); margin:30px 0;}
+.bc-meta{display:flex; flex-direction:column; gap:6px;}
+.bc-meta .bc-name{font-size:14px; font-weight:700;}
+.bc-meta .bc-sub{font-size:12px; opacity:.7;}
+
+@media (max-width:640px){
+  .sitenav{gap:14px; padding:12px 16px;}
+  .sitenav .brand{margin-right:0;}
+}
