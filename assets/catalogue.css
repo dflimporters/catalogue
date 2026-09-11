@@ -15,16 +15,26 @@ html{scroll-behavior:smooth;}
 body{background:#E4E6EA; font-family:'Inter',-apple-system,sans-serif; -webkit-font-smoothing:antialiased;}
 
 /* ---------- site chrome (index.html only) ---------- */
+/* Desktop: .sitenav-bar and .nav-links flatten into the row via
+   display:contents, so brand + toggle + links all sit as siblings in one
+   centered flex row — visually identical to the old flat markup. */
 .sitenav{
   position:sticky; top:0; z-index:50; background:rgba(18,22,28,.96); backdrop-filter:blur(6px);
   display:flex; align-items:center; justify-content:center; gap:22px; padding:14px 24px; overflow-x:auto; white-space:nowrap;
 }
+.sitenav-bar{display:contents;}
+.nav-links{display:contents;}
 .sitenav a{color:rgba(255,255,255,.7); font-size:12.5px; font-weight:600; text-decoration:none; letter-spacing:.01em;}
 .sitenav a:hover, .sitenav a.active{color:#fff;}
 .sitenav .brand{color:#fff; font-weight:800; font-size:13px; margin-right:6px; letter-spacing:.01em;}
+.nav-toggle{
+  display:none; background:none; border:none; color:#fff; padding:6px; margin:0;
+  cursor:pointer; align-items:center; justify-content:center;
+}
+.nav-toggle svg{width:22px; height:22px;}
 
 .site-frame{padding:28px 16px 60px;}
-.page-frame{position:relative; width:100%; max-width:816px; margin:0 auto 28px; overflow:hidden; border-radius:4px;}
+.page-frame{position:relative; width:100%; max-width:816px; margin:0 auto 28px; overflow:hidden; border-radius:4px; scroll-margin-top:64px;}
 .page-frame .page{position:absolute; top:0; left:0; width:816px; transform-origin:top left;}
 
 /* ---------- inner page design system (shared across all pages) ---------- */
@@ -162,7 +172,14 @@ body{background:#E4E6EA; font-family:'Inter',-apple-system,sans-serif; -webkit-f
 }
 .fact{text-align:center; padding:0 14px; border-left:1px solid var(--line);}
 .fact:first-child{border-left:none;}
+.fact-icon{
+  width:40px; height:40px; border-radius:50%; background:var(--dfl-blue); color:#fff;
+  display:flex; align-items:center; justify-content:center; margin:0 auto 12px;
+  box-shadow:0 3px 8px rgba(18,22,28,.16);
+}
+.fact-icon svg{width:19px; height:19px;}
 .fact-num{font-size:24px; font-weight:800; color:var(--dfl-blue-deep); letter-spacing:-.01em; line-height:1.15;}
+.fact-num.small{font-size:17px;}
 .fact-label{font-size:10.5px; color:var(--text-soft); margin-top:8px; line-height:1.4; font-weight:600;}
 
 /* ---------- section divider page (e.g. Covebay intro banner) ---------- */
@@ -206,7 +223,96 @@ body{background:#E4E6EA; font-family:'Inter',-apple-system,sans-serif; -webkit-f
 .bc-meta .bc-name{font-size:14px; font-weight:700;}
 .bc-meta .bc-sub{font-size:12px; opacity:.7;}
 
-@media (max-width:640px){
-  .sitenav{gap:14px; padding:12px 16px;}
-  .sitenav .brand{margin-right:0;}
+/* =========================================================================
+   MOBILE (<=680px) — real reflow, not a scaled-down desktop screenshot.
+   Everything above this point is the desktop/tablet design and is
+   untouched by this block. Two things happen below:
+   1. The sticky nav becomes a hamburger + dropdown instead of a row that
+      overflows into horizontal scroll.
+   2. Each fixed 816px "page" stops being scaled down as one rigid unit
+      (assets/catalogue.js skips the transform below this same 680px
+      breakpoint) and instead reflows at 100% width with its own mobile
+      spacing/column rules, so text renders at a real, comfortable size
+      instead of a shrunk fraction of the desktop size.
+   ========================================================================= */
+@media (max-width:680px){
+
+  /* ---- nav: hamburger + full-width dropdown ---- */
+  .sitenav{flex-direction:column; align-items:stretch; gap:0; padding:0; overflow-x:visible; white-space:normal;}
+  .sitenav-bar{display:flex; align-items:center; justify-content:space-between; width:100%; padding:13px 16px;}
+  .nav-toggle{display:flex;}
+  .nav-links{
+    display:none; flex-direction:column; width:100%;
+    border-top:1px solid rgba(255,255,255,.12);
+  }
+  .sitenav.open .nav-links{display:flex;}
+  .sitenav .nav-links a{
+    padding:14px 16px; border-bottom:1px solid rgba(255,255,255,.08);
+    font-size:14px;
+  }
+
+  /* ---- page canvas: fluid instead of scaled ---- */
+  .site-frame{padding:16px 12px 40px;}
+  .page-frame{max-width:100%; margin:0 auto 16px; overflow:visible;}
+  .page-frame .page{position:static; width:100%; height:auto; box-shadow:0 4px 20px rgba(18,22,28,.16);}
+
+  /* ---- shared hero band ---- */
+  .hero{padding:20px 18px 18px;}
+  .hero h1{font-size:21px;}
+  .hero p{font-size:12.5px;}
+  .hero-brand-chip{height:44px; padding:0 14px;}
+  .hero-brand-chip img{height:24px;}
+  .hero-brand-chip.solo{height:50px; padding:0 18px;}
+  .hero-brand-chip.solo img{height:28px;}
+
+  /* ---- card content + grid ---- */
+  .content{padding:18px 14px 0;}
+  .grid{grid-template-columns:1fr; gap:12px;}
+  /* .card.feature{grid-column:span 2} otherwise forces an implicit 2nd
+     column into existence even though there's only 1 explicit track here —
+     then every other (non-spanning) card in the grid gets auto-placed
+     across both columns instead of stacking in the one real column. */
+  .card.feature{grid-column:span 1; padding:16px;}
+
+  /* ---- footer: no longer pinned to a fixed-height canvas ---- */
+  .footer{position:static; height:auto; padding:12px 14px; flex-wrap:wrap; gap:4px 12px;}
+
+  /* ---- cover ---- */
+  .cover-topbar{height:56px;}
+  .cover-logo{height:28px;}
+  .cover-hero{height:270px;}
+  .cover-hero-content{padding:0 20px;}
+  .cover-hero-content h1{font-size:20px;}
+  .cover-hero-content p{font-size:12.5px;}
+  .cover-gallery{padding:22px 14px 0;}
+  .cover-gallery-grid{grid-template-columns:1fr; padding:4px 18px 6px;}
+  .gallery-col{border-left:none; border-top:1px solid var(--line); padding:18px 0;}
+  .gallery-col:first-child{border-top:none; padding-top:0;}
+  .cover-facts{padding:24px 14px 28px;}
+  .cover-facts-grid{display:flex; flex-direction:column; grid-template-columns:none; padding:4px 18px;}
+  .fact{
+    display:flex; align-items:center; gap:12px; text-align:left;
+    border-left:none; border-top:1px solid var(--line); padding:14px 0;
+  }
+  .fact:first-child{border-top:none;}
+  .fact-icon{width:34px; height:34px; margin:0; flex:none;}
+  .fact-icon svg{width:16px; height:16px;}
+  .fact-text{display:flex; align-items:baseline; flex-wrap:wrap; gap:5px 7px;}
+  .fact-num{font-size:15.5px;}
+  .fact-num.small{font-size:15.5px;}
+  .fact-label{margin-top:0; font-size:11.5px;}
+
+  /* ---- section divider page ---- */
+  .divider-header{padding:18px 18px 0;}
+  .divider-body{padding:22px 18px 30px;}
+  .divider-title{font-size:21px;}
+  .divider-sub{font-size:12.5px;}
+
+  /* ---- table of contents ---- */
+  .toc-tabs{gap:6px;}
+  .toc-tab{padding:6px 12px; font-size:10.5px;}
+
+  /* ---- back cover: was absolute/inset over a fixed-height page ---- */
+  .backcover{position:static; padding:56px 22px;}
+  .bc-thanks{font-size:19px; margin-top:26px;}
 }

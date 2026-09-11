@@ -17,7 +17,7 @@ http.createServer((req, res) => {
   fs.readFile(filePath, (err, data) => {
     if (err) { res.writeHead(404); res.end('Not found: ' + reqPath); return; }
     const ext = path.extname(filePath);
-    res.writeHead(200, { 'Content-Type': types[ext] || 'application/octet-stream' });
+    res.writeHead(200, { 'Content-Type': types[ext] || 'application/octet-stream', 'Cache-Control': 'no-store' });
     res.end(data);
   });
 }).listen(port, () => console.log('Serving ' + root + ' at http://localhost:' + port));
