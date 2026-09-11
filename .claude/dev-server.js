@@ -7,7 +7,7 @@ const port = 5183;
 
 const types = {
   '.html': 'text/html', '.css': 'text/css', '.js': 'application/javascript',
-  '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml',
+  '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.json': 'application/json',
 };
 
 http.createServer((req, res) => {

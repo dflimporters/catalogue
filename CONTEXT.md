@@ -16,6 +16,53 @@ constraints.
 **No dollar figures anywhere in this catalogue** — explicit instruction.
 Don't reintroduce revenue/price badges even as a "nice to have."
 
+## Repo move + index.html-only + icon set (2026-09-11)
+
+- **This project now lives at a different path**: the git repo is
+  `C:\Users\blues\OneDrive - DFL Importers & Distributors\catalogue`
+  (remote: `https://github.com/dflimporters/catalogue.git`, branch `main`),
+  copied over from the original build folder
+  (`...\DFL Catalogue Build 2026 (HTML)`, now stale — don't edit it, it's
+  not the repo). Everything below this point happened in `catalogue`.
+- **Individual page files are gone.** `01-cover-v3.html`,
+  `02-covebay-cups.html`, `03-covebay-banner.html`, `03-covebay-takeout.html`,
+  `04-covebay-new-2027.html`, `05-household-paper.html`,
+  `06-rhino-garbage-bags.html`, `07-oltimez.html`, `back-cover.html`,
+  `toc.html` were all `git rm`'d. **`index.html` is now the only page file
+  and the only copy of every section's markup** — there is no longer a
+  second copy to keep in sync, which was a real source of bugs before (see
+  the image-wiring corruption incident earlier in this file). If you need
+  to look at just one section, find its `<section id="...">` in
+  `index.html` rather than reaching for a standalone file — there isn't
+  one anymore.
+- **Icon set added** (`assets/icons/`): `favicon-32.png`, `favicon.png`
+  (64px), `icon-192.png`, `icon-512.png`, `icon-512-maskable.png`,
+  `apple-touch-icon.png` (180px) — plus a root `manifest.json` referencing
+  the three PWA-sized icons, wired into `index.html`'s `<head>` (favicon
+  links, apple-touch-icon, manifest link, `theme-color` meta = `#15295C`).
+  Matches the icon set pattern from DFL's other web build (the digital
+  business-card site) that Joel referenced.
+  - **Source**: not new artwork — cropped the blue "D" arrow mark directly
+    out of `assets/dfl-logo-color.png` (bbox roughly x:58–2080, y:172–1174
+    in that 4600×2195 source), recolored white, composited onto a solid
+    `--dfl-blue-deep` (`#15295C`) square at each target size. Built with
+    PowerShell + `System.Drawing` (`LockBits` for the recolor, fast enough
+    at full res; `GetPixel` was used only on a 10×-downsampled copy to find
+    the initial bbox, then refined with an exact full-res pixel scan).
+  - **Gotcha hit and fixed**: the first recolor pass turned *every* pixel
+    with alpha>0 inside the crop rectangle white, not just blue ones — since
+    the crop rectangle's right edge overlapped the start of the black "F"
+    in "FL", a chunk of that letter got whitened too and showed up as a
+    stray triangle in the icon. Fix: test each pixel's *color* (blue-ish:
+    `B>120 and B>R+30 and R<160`) before whitening, not just its alpha, and
+    derive the crop bbox from that same color test at full resolution
+    instead of guessing a rectangle by eye. If you ever need to re-extract
+    a mark from a multi-element logo file again, do the color-test-then-bbox
+    approach from the start.
+  - No scratch/debug PNGs were left behind (`d-mark-white-source.png`,
+    `debug-*.png`) — those were deleted once the real icons were confirmed
+    correct; don't be surprised if a future session doesn't find them.
+
 ## "What we do" gallery upgrade (2026-09-10, fifth same-day round)
 
 Joel shared a reference screenshot (3 gradient-icon-on-photo pillar cards:
@@ -286,44 +333,42 @@ All were renamed from their original uploaded filenames (which had spaces/
 parens) to clean kebab-case slugs — original filenames are gone, these are
 the only copies.
 
-## Pages (rebuilt 2026-09-10 — old page files for this range were deleted, not kept)
+## Pages — all in index.html as of 2026-09-11 (see the section above)
 
-| File | Status |
-|---|---|
-| `index.html` | Live scrolling site — nav + all 10 sections below |
-| `01-cover-v3.html` | Cover — rebuilt 2026-09-10, see above. Top logo bar, photo hero w/ blue overlay, 3-photo ops gallery. No page-tag (matches back cover's untagged treatment). |
-| `toc.html` | Table of contents — hero pill tabs + 8-tile card grid (Cover + 6 sections + Back Cover). Page-tag `02`. |
-| `03-covebay-banner.html` | **New page, added 2026-09-10** — Covebay intro/divider banner between TOC and the first Covebay page, see above. Page-tag `03` (previously unused). |
-| `02-covebay-cups.html` | Covebay Cups, Plates & Hot Drinkware (7 families, all photographed). Page-tag `04` — yes, filename `02` / page-tag `04` is a real mismatch, predates the banner page insert; not worth a filename churn to fix, the page-tag is what actually displays. |
-| `03-covebay-takeout.html` | Covebay Take-Out, Foil & Wrap (7 families, all photographed). Page-tag `05`. |
-| `04-covebay-new-2027.html` | Covebay "New for 2027" preview (Bath Tissue, Paper Towel, Soap Powder, Easy Dispense Garbage Bags), no real SKUs, `NEW FOR 2027` orange flag on every card. Page-tag `06`. |
-| `05-household-paper.html` | Domino, Bingo, Clean & White, White & Bright (4 families, all photographed). Page-tag `07`. |
-| `06-rhino-garbage-bags.html` | Rhino, 4 families, all photographed. Page-tag `08`. |
-| `07-oltimez.html` | Ol' Timez Beverages & Pantry (Ginger Beer, Coconut Oil, Corned Beef — 3 families, all photographed). No Mackerel (no active SKU). Page-tag `09`. |
-| `back-cover.html` | Back cover — DFL white logo; contact line still deliberately generic pending real contact details from Joel. No page-tag. |
+`index.html` is the **only** page file — no more standalone per-page HTML
+files. Sections, in reading order, by their `<section id="...">` anchor and
+displayed page-tag:
 
-Page-tag numbers (the small "NN / brands" text in each hero) now run, in
-actual reading order: 01(cover, untagged) → 02(toc) → 03(covebay-banner) →
-04(covebay-cups) → 05(covebay-takeout) → 06(covebay-new-2027) →
-07(household-paper) → 08(rhino) → 09(oltimez) → back cover (untagged).
-**Filenames no longer match this order** (`02-covebay-cups.html` displays
-page-tag `04`, etc.) — that ship sailed when the banner page took slot `03`
-without a full renumbering pass. Not a bug, just don't be surprised by it;
-the page-tag (what's actually visible) is authoritative, not the filename.
+| Anchor | Content | Page-tag |
+|---|---|---|
+| `#cover` | Cover — top logo bar, photo hero w/ blue overlay, "What we do" gallery (Main Office/Inbound/Outbound), Company Snapshot stats | none |
+| `#toc` | Table of contents — hero pill tabs + 8-tile card grid | `02` |
+| `#covebay-banner` | Covebay intro/divider banner (compact, `height:auto` page) | `03` |
+| `#covebay-cups` | Covebay Cups, Plates & Hot Drinkware (7 families, all photographed) | `04` |
+| `#covebay-takeout` | Covebay Take-Out, Foil & Wrap (7 families, all photographed) | `05` |
+| `#covebay-new-2027` | Covebay "New for 2027" preview, no real SKUs, `NEW FOR 2027` flag on every card | `06` |
+| `#household-paper` | Domino, Bingo, Clean & White, White & Bright (4 families, all photographed) | `07` |
+| `#rhino` | Rhino, 4 families, all photographed | `08` |
+| `#oltimez` | Ol' Timez Beverages & Pantry (Ginger Beer, Coconut Oil, Corned Beef — 3 families, all photographed). No Mackerel (no active SKU) | `09` |
+| `#back-cover` | Back cover — DFL white logo; contact line still deliberately generic pending real contact details from Joel | none |
 
-Old files from the 2026-09-09/10 rebuild were deleted outright (not kept as
-"safe to delete" leftovers) since their content was fully superseded:
-`02-covebay-spread-v4.html`, `03-covebay-eco-takeout.html`,
-`04-covebay-household.html`, `05-essentials-v2.html`.
+To edit one section, find its `<section id="...">` in `index.html` — there
+is no separate file for it anymore. This resolved a real recurring problem:
+every earlier round of edits touched two copies of each page (the
+standalone file and its mirror in `index.html`) and more than once they
+drifted or a fix landed in only one (see the image-wiring corruption
+incident above) — one copy removes that failure mode entirely.
 
 ## Local preview
 
-No plain `file://` open for `index.html` (relative asset paths need a real
-origin — the pages work fine standalone via `file://` since sibling-relative
-`<img>`/`<link>` resolution doesn't need CORS, but `index.html`'s design was
-validated through a real server). Use `.claude/launch.json`'s
-`catalogue-preview` config (`node .claude/dev-server.js`, port 5183) or any
-static server.
+`index.html`'s relative asset paths need a real HTTP origin, not a plain
+`file://` open. Use `.claude/launch.json`'s `catalogue-preview` config
+(`node .claude/dev-server.js`, serves the repo root on port 5183) or any
+static server. Note as of 2026-09-11 this repo lives at a different path
+than before (see "Repo move" above) — if a preview tool's own named-config
+lookup still resolves to the old stale folder, start the server manually
+(`node .claude/dev-server.js` from the repo root) and preview by URL
+instead of by config name.
 
 ## Still open / next steps
 
