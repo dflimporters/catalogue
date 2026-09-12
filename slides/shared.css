@@ -1,0 +1,264 @@
+/* DFL Expo Slideshow — shared engine + design system
+   Colors/type match assets/catalogue.css (the print catalogue) on purpose. */
+
+:root{
+  --dfl-blue:#2C67D2;      --dfl-blue-deep:#15295C;
+  --ink:#12161C;           --bg:#F4F5F7;        --card:#FFFFFF;
+  --line:rgba(18,22,28,0.08);
+  --orange:#F5A623;        --orange-deep:#D9890F;
+  --text-soft:#5B6472;     --text-faint:#8B93A0;
+}
+
+*{box-sizing:border-box;}
+html,body{
+  margin:0; padding:0; width:100%; height:100%;
+  background:#000; overflow:hidden;
+  font-family:'Inter',-apple-system,sans-serif; -webkit-font-smoothing:antialiased;
+}
+
+.deck{
+  position:relative; width:100vw; height:100vh; overflow:hidden;
+  background:var(--bg);
+}
+
+.slide{
+  position:absolute; inset:0;
+  opacity:0; visibility:hidden;
+  transform:scale(1.015);
+  transition:opacity 1.1s ease, transform 1.4s ease, visibility 0s linear 1.1s;
+  display:flex; flex-direction:column;
+}
+.slide.active{
+  opacity:1; visibility:visible; transform:scale(1);
+  transition:opacity 1.1s ease, transform 1.4s ease, visibility 0s linear 0s;
+  z-index:2;
+}
+
+/* ---------- shared bits ---------- */
+
+.eyebrow{
+  font-size:1.05vw; font-weight:800; letter-spacing:.14em; text-transform:uppercase;
+}
+
+/* persistent per-slide brand marks */
+.corner-dfl{
+  position:absolute; top:1.4vw; left:2vw; z-index:5; pointer-events:none;
+  display:flex; align-items:center;
+  background:rgba(15,25,55,.4); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+  border-radius:100px; padding:.4vw .9vw;
+}
+.corner-dfl img{ height:1.35vw; display:block; filter:brightness(0) invert(1); opacity:.95; }
+.corner-covebay{
+  position:absolute; top:2vw; right:2.4vw; z-index:5; pointer-events:none;
+  display:flex; align-items:center; background:#fff; border-radius:100px;
+  padding:.7vw 1.5vw; box-shadow:0 .5vw 1.3vw rgba(18,22,28,.2);
+}
+.corner-covebay img{ height:2.6vw; display:block; }
+.progress{
+  position:absolute; left:0; right:0; bottom:1.4vw; z-index:6;
+  display:flex; justify-content:center; gap:.55vw;
+}
+.progress .dot{
+  width:.55vw; height:.55vw; border-radius:100px; background:rgba(255,255,255,.35);
+  cursor:pointer; transition:background .3s ease, width .3s ease;
+}
+.progress .dot.on{ background:#fff; width:1.5vw; }
+.deck.on-light .progress .dot{ background:rgba(18,22,28,.18); }
+.deck.on-light .progress .dot.on{ background:var(--dfl-blue-deep); }
+
+.dotgrid{
+  position:absolute; inset:0;
+  background-image:radial-gradient(circle, rgba(255,255,255,.16) 1px, transparent 1px);
+  background-size:1.7vw 1.7vw;
+  pointer-events:none;
+}
+
+/* ---------- hero / full-bleed background slides ---------- */
+
+.slide.hero-bg{ color:#fff; justify-content:flex-end; }
+.hero-bg .bg-wrap{ position:absolute; inset:0; overflow:hidden; }
+.hero-bg .bg-wrap img{
+  width:100%; height:100%; object-fit:cover;
+  animation:kenburns 22s ease-in-out infinite alternate;
+}
+.hero-bg .bg-scrim{
+  position:absolute; inset:0;
+  background:linear-gradient(180deg, rgba(21,41,92,.35) 0%, rgba(21,41,92,.55) 45%, rgba(15,25,55,.94) 100%);
+}
+.hero-bg .bg-scrim.solid{
+  background:linear-gradient(155deg, rgba(44,103,210,.88) 0%, rgba(21,41,92,.96) 100%);
+}
+@keyframes kenburns{
+  0%{ transform:scale(1.0) translate(0,0); }
+  100%{ transform:scale(1.11) translate(-1.2%, -1.6%); }
+}
+
+.hero-bg .content{
+  position:relative; z-index:3; padding:0 6vw 6.5vw;
+  max-width:64vw;
+}
+.hero-bg h1{
+  font-size:4.6vw; font-weight:800; line-height:1.05; letter-spacing:-.01em;
+  margin:.6vw 0 1vw;
+}
+.hero-bg p{
+  font-size:1.55vw; line-height:1.5; color:rgba(255,255,255,.86); max-width:44vw;
+}
+.eyebrow-row{ display:flex; align-items:center; gap:1vw; }
+.brand-chip{
+  display:inline-flex; align-items:center; background:#fff; border-radius:100px;
+  padding:.5vw 1.3vw; box-shadow:0 .6vw 1.6vw rgba(0,0,0,.25);
+}
+.brand-chip img{ height:2vw; display:block; }
+
+/* ---------- banner-hero (title slide, product banner shown uncropped) ---------- */
+
+.slide.banner-hero{
+  background:linear-gradient(165deg, var(--dfl-blue) 0%, var(--dfl-blue-deep) 100%);
+  color:#fff; align-items:center; justify-content:center; text-align:center;
+}
+.banner-hero .bh-inner{ position:relative; z-index:2; display:flex; flex-direction:column; align-items:center; padding:0 4vw; }
+.banner-hero .bh-inner .eyebrow{ color:rgba(255,255,255,.7); }
+.banner-hero h1{ font-size:4vw; font-weight:800; letter-spacing:-.01em; margin:.7vw 0 .8vw; }
+.banner-hero p.tag{ font-size:1.4vw; color:rgba(255,255,255,.86); max-width:42vw; line-height:1.5; margin-bottom:2.4vw; }
+.banner-hero .bh-banner-wrap{
+  background:#fff; border-radius:1.4vw; padding:2.2vw 3vw;
+  box-shadow:0 2.4vw 4vw rgba(0,0,0,.28);
+}
+.banner-hero .bh-banner-wrap img{ display:block; max-width:52vw; max-height:22vw; object-fit:contain; }
+
+/* ---------- split slides (text panel + product showcase) ---------- */
+
+.slide.split{ flex-direction:row; }
+.split .panel{
+  position:relative; width:44%; height:100%;
+  background:linear-gradient(165deg, var(--dfl-blue) 0%, var(--dfl-blue-deep) 100%);
+  color:#fff; display:flex; flex-direction:column; justify-content:center;
+  padding:0 3.6vw;
+}
+.split.reverse{ flex-direction:row-reverse; }
+.split .panel .eyebrow{ color:rgba(255,255,255,.68); }
+.split .panel h2{
+  font-size:3.3vw; font-weight:800; line-height:1.08; letter-spacing:-.01em;
+  margin:.9vw 0 1.3vw;
+}
+.split .panel p{ font-size:1.35vw; line-height:1.55; color:rgba(255,255,255,.86); max-width:30vw; }
+.split .panel .spec-line{
+  margin-top:1.6vw; font-size:1.15vw; font-weight:600; color:rgba(255,255,255,.75);
+  padding-top:1.2vw; border-top:1px solid rgba(255,255,255,.22);
+}
+.split .stage{
+  position:relative; width:56%; height:100%;
+  background:radial-gradient(ellipse at 50% 45%, #ffffff 0%, #EDEFF3 68%, #E4E7EC 100%);
+  display:flex; align-items:center; justify-content:center;
+}
+.split .stage img{
+  max-width:62%; max-height:66%; object-fit:contain;
+  filter:drop-shadow(0 2.4vw 2.6vw rgba(18,22,28,.22));
+}
+.split .glow{
+  position:absolute; width:34vw; height:34vw; border-radius:50%;
+  background:radial-gradient(circle, rgba(44,103,210,.14) 0%, transparent 70%);
+}
+
+/* ---------- grid / showcase slides (light background) ---------- */
+
+.slide.grid-slide{ background:var(--bg); color:var(--ink); }
+
+/* unscoped so every slide type (grid-slide, stats-slide, ...) gets the same header padding.
+   top padding is tall enough to clear .corner-dfl so the badge never overlaps the eyebrow/title. */
+.gs-header{
+  padding:4.2vw 5vw 1vw; position:relative; z-index:2;
+}
+.grid-slide .gs-header .eyebrow{ color:var(--dfl-blue-deep); }
+.gs-header h2{
+  font-size:2.9vw; font-weight:800; letter-spacing:-.01em; margin:.6vw 0 .5vw; color:var(--ink);
+}
+.gs-header p{ font-size:1.2vw; color:var(--text-soft); max-width:52vw; line-height:1.5; }
+
+.gs-grid{
+  flex:1; display:grid; gap:1.6vw; padding:0 5vw 3vw;
+  align-content:center;
+}
+.gs-grid.cols-4{ grid-template-columns:repeat(4,1fr); }
+.gs-grid.cols-3{ grid-template-columns:repeat(3,1fr); }
+.gs-grid.cols-2{ grid-template-columns:repeat(2,1fr); gap:1.6vw; padding-bottom:1.6vw; }
+
+.gs-tile{
+  background:var(--card); border:1px solid var(--line); border-radius:1.2vw;
+  padding:1.6vw 1.4vw 1.4vw; display:flex; flex-direction:column; align-items:center;
+  box-shadow:0 .5vw 1.4vw rgba(18,22,28,.05);
+  position:relative;
+}
+.gs-tile .thumb{
+  width:100%; height:11vw; display:flex; align-items:center; justify-content:center; margin-bottom:1.1vw;
+}
+.gs-tile .thumb img{ max-width:88%; max-height:88%; object-fit:contain; }
+.gs-tile .gt-name{ font-size:1.15vw; font-weight:800; color:var(--ink); text-align:center; letter-spacing:-.005em; }
+.gs-tile .gt-spec{ font-size:.85vw; color:var(--text-soft); text-align:center; margin-top:.35vw; line-height:1.4; }
+
+.gs-grid.cols-2 .gs-tile{ padding:1.3vw 2vw 1.1vw; }
+.gs-grid.cols-2 .gs-tile .thumb{ height:11vw; margin-bottom:.8vw; }
+.gs-grid.cols-2 .gs-tile .gt-name{ font-size:1.5vw; }
+.gs-grid.cols-2 .gs-tile .gt-spec{ font-size:1.02vw; margin-top:.3vw; }
+.gs-tile .new-flag{
+  position:absolute; top:.7vw; right:.7vw;
+  background:linear-gradient(135deg,var(--orange),var(--orange-deep)); color:#fff;
+  font-size:.68vw; font-weight:800; letter-spacing:.05em; text-transform:uppercase;
+  padding:.35vw .7vw; border-radius:100px;
+}
+
+/* ---------- stats slide ---------- */
+
+.slide.stats-slide{ background:linear-gradient(165deg, var(--dfl-blue) 0%, var(--dfl-blue-deep) 100%); color:#fff; }
+.stats-slide .gs-header .eyebrow{ color:rgba(255,255,255,.7); }
+.stats-slide .gs-header h2{ color:#fff; }
+.stats-slide .gs-header p{ color:rgba(255,255,255,.82); }
+.stats-grid{
+  flex:1; display:grid; grid-template-columns:repeat(5,1fr); gap:1.4vw;
+  padding:0 5vw 5vw; align-content:center;
+}
+.stat-card{
+  background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.22); border-radius:1.2vw;
+  padding:2vw 1vw; text-align:center;
+}
+.stat-num{ font-size:2.6vw; font-weight:800; letter-spacing:-.01em; }
+.stat-num.small{ font-size:1.7vw; }
+.stat-label{ font-size:1.05vw; color:rgba(255,255,255,.82); margin-top:.7vw; line-height:1.35; font-weight:600; }
+
+/* ---------- logo roster slide ---------- */
+
+.logo-grid{
+  flex:1; display:grid; grid-template-columns:repeat(4,1fr); gap:1.6vw;
+  padding:0 5vw 4.5vw; align-content:center;
+}
+.logo-card{
+  background:var(--card); border:1px solid var(--line); border-radius:1.2vw;
+  height:9vw; display:flex; align-items:center; justify-content:center;
+  box-shadow:0 .5vw 1.4vw rgba(18,22,28,.05);
+}
+.logo-card img{ max-width:70%; max-height:56%; object-fit:contain; }
+.logo-card.solo-covebay{ grid-column:span 2; background:linear-gradient(165deg, var(--dfl-blue) 0%, var(--dfl-blue-deep) 100%); }
+.logo-card.solo-covebay img{ max-width:46%; max-height:48%; }
+.logo-card.text-mark{ font-size:1.7vw; font-weight:800; font-style:italic; color:var(--dfl-blue-deep); letter-spacing:-.01em; }
+
+/* ---------- closing slide ---------- */
+
+.slide.closing{
+  background:linear-gradient(165deg, var(--dfl-blue) 0%, var(--dfl-blue-deep) 100%);
+  color:#fff; align-items:center; justify-content:center; text-align:center;
+}
+.closing .cl-inner{ position:relative; z-index:2; display:flex; flex-direction:column; align-items:center; }
+.closing img.cl-logo{ height:4.2vw; filter:brightness(0) invert(1); margin-bottom:2.2vw; }
+.closing h2{ font-size:3vw; font-weight:800; letter-spacing:-.01em; margin:0 0 1vw; }
+.closing p{ font-size:1.35vw; color:rgba(255,255,255,.85); max-width:38vw; line-height:1.5; }
+.closing .cl-url{ margin-top:2vw; font-size:1.1vw; font-weight:700; letter-spacing:.03em; color:#fff; opacity:.9; }
+
+/* ---------- pause indicator ---------- */
+.pause-badge{
+  position:absolute; bottom:4.2vw; right:3vw; z-index:6;
+  background:rgba(0,0,0,.45); color:#fff; font-size:1vw; font-weight:700;
+  padding:.5vw 1.1vw; border-radius:100px; letter-spacing:.03em;
+  opacity:0; pointer-events:none; transition:opacity .25s ease;
+}
+.deck.paused .pause-badge{ opacity:1; }

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DFL Expo Slideshows</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0; min-height:100vh; background:#0F1932; font-family:'Inter',sans-serif; display:flex; align-items:center; justify-content:center;}
+  .wrap{max-width:760px; padding:48px 24px; color:#fff; text-align:center;}
+  h1{font-size:28px; font-weight:800; margin:0 0 8px;}
+  p{color:rgba(255,255,255,.7); font-size:15px; margin:0 0 32px;}
+  .cards{display:grid; grid-template-columns:1fr 1fr; gap:20px;}
+  a.card.master{grid-column:span 2; background:rgba(44,103,210,.18); border-color:rgba(44,103,210,.4);}
+  a.card{
+    display:block; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14);
+    border-radius:16px; padding:28px 20px; text-decoration:none; color:#fff; transition:background .2s ease;
+  }
+  a.card:hover{background:rgba(255,255,255,.12);}
+  a.card .name{font-size:19px; font-weight:800; margin-bottom:6px;}
+  a.card .desc{font-size:13px; color:rgba(255,255,255,.65); line-height:1.5;}
+  .hint{margin-top:28px; font-size:12.5px; color:rgba(255,255,255,.5);}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>DFL Expo Slideshows</h1>
+    <p>Full-screen, auto-looping decks for the booth TV. Press F for fullscreen once loaded.</p>
+    <div class="cards">
+      <a class="card master" href="master.html">
+        <div class="name">Master Deck — Covebay + DFL</div>
+        <div class="desc">Both decks back to back in one continuous loop. Use this if the booth only has one screen.</div>
+      </a>
+      <a class="card" href="covebay.html">
+        <div class="name">Covebay Hero Deck</div>
+        <div class="desc">Product showcase — packaging, cups &amp; drinkware, take-out &amp; foil, New for 2027 preview.</div>
+      </a>
+      <a class="card" href="dfl-overview.html">
+        <div class="name">DFL Brand Overview</div>
+        <div class="desc">Company snapshot, what we do, the seven-brand roster.</div>
+      </a>
+    </div>
+    <div class="hint">Space = pause/resume &middot; Arrow keys = prev/next &middot; Click anywhere = next &middot; Esc = back to this menu</div>
+  </div>
+</body>
+</html>
